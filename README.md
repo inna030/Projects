@@ -1,2 +1,2 @@
 # Projects 
-The project including data warehousing, AI assistant, real-time Spark project.
+Including data warehousing, AI assistant, real-time Spark project.
