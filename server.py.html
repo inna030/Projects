@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>server.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+server.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">socket</span>
+<span class="s0">from </span><span class="s1">threading </span><span class="s0">import </span><span class="s1">Thread</span>
+<span class="s1">ss=socket.socket() </span><span class="s2">#server socket</span>
+<span class="s1">ss.bind((</span><span class="s3">&quot;&quot;</span><span class="s0">,</span><span class="s4">2900</span><span class="s1">))</span>
+<span class="s1">ss.listen()</span>
+<span class="s1">clients={}</span>
+<span class="s0">def </span><span class="s1">client_task(client_name</span><span class="s0">,</span><span class="s1">client_conn</span><span class="s0">,</span><span class="s1">client_addr):</span>
+    <span class="s0">while True</span><span class="s1">:</span>
+        <span class="s1">data=client_conn.recv(</span><span class="s4">1000</span><span class="s1">)</span>
+        <span class="s1">message=client_name+</span><span class="s3">&quot;: &quot;</span><span class="s1">+data.decode()</span>
+        <span class="s0">for </span><span class="s1">client </span><span class="s0">in </span><span class="s1">clients:</span>
+            <span class="s0">if </span><span class="s1">client!=client_name:</span>
+                <span class="s1">clients[client].sendall(message.encode())</span>
+<span class="s0">while True</span><span class="s1">:</span>
+    <span class="s1">conn</span><span class="s0">,</span><span class="s1">addr=ss.accept()</span>
+    <span class="s1">print(</span><span class="s3">&quot;got a connection from client at address &quot;</span><span class="s0">,</span><span class="s1">addr)</span>
+    <span class="s1">name=conn.recv(</span><span class="s4">1000</span><span class="s1">)</span>
+    <span class="s1">clients[name.decode()]=conn</span>
+    <span class="s1">t=Thread(target=client_task</span><span class="s0">,</span><span class="s1">args=(name.decode</span><span class="s0">,</span><span class="s1">conn</span><span class="s0">,</span><span class="s1">addr))</span>
+    <span class="s1">t.start()</span>
+</pre>
+</body>
+</html>
